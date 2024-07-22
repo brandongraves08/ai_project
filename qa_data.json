@@ -1,0 +1,20 @@
+{
+  "questions": [
+    {
+      "question": "What is the company's vacation policy?",
+      "answer": "Our company offers 15 days of paid vacation per year, accrued monthly. Unused vacation days can be carried over to the next year, up to a maximum of 5 days."
+    },
+    {
+      "question": "How do I reset my password?",
+      "answer": "To reset your password, go to the company portal and click on 'Forgot Password'. Follow the instructions sent to your email to create a new password."
+    },
+    {
+      "question": "When is the next company-wide meeting?",
+      "answer": "Our next company-wide meeting is scheduled for the last Friday of this month at 3 PM EST. You'll receive a calendar invite with the video conference link."
+    },
+    {
+      "question": "What's the process for expense reimbursement?",
+      "answer": "To get reimbursed for expenses, fill out the expense report form available on the company intranet. Attach all receipts and submit it to your manager for approval. Once approved, the finance team will process the reimbursement within 5-7 business days."
+    }
+  ]
+}
