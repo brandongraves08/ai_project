@@ -1,31 +1,30 @@
-# Simple Slack Q&A Chatbot
+# RAG Chatbot
 
 ## Overview
 
-This project implements a basic Q&A chatbot integrated with Slack. The chatbot uses a predefined set of questions and answers to respond to user queries. It's designed as a minimal viable product (MVP) to quickly deploy and gather user feedback before implementing more advanced features.
+This project implements a standalone Question Answering (QA) chatbot using Retrieval-Augmented Generation (RAG). The chatbot uses a combination of local documents as its knowledge base to provide dynamic and contextually relevant responses.
 
 ## Features
 
-- Simple keyword-based matching for user queries
-- Integration with Slack for direct messages and mentions
-- Easy-to-update Q&A database using a JSON file
-- Basic error handling and logging
+- RAG-based response generation for dynamic answers
+- Ability to process and use information from various file types (txt, pdf, json, csv, html, md)
+- Uses HuggingFace models for language understanding and generation
+- Easy-to-use command-line interface for testing and interaction
 
 ## Prerequisites
 
 - Python 3.7+
-- A Slack workspace with permissions to add apps and bots
-- Slack App with bot token and app-level token
+- pip (Python package installer)
 
 ## Setup
 
 1. Clone the repository:
    ```
-   git clone https://github.com/your-username/simple-slack-qa-chatbot.git
-   cd simple-slack-qa-chatbot
+   git clone https://github.com/brandongraves08/ai_project.git
+   cd ai_project
    ```
 
-2. Set up a virtual environment:
+2. Set up a virtual environment (optional but recommended):
    ```
    python -m venv venv
    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
@@ -33,63 +32,67 @@ This project implements a basic Q&A chatbot integrated with Slack. The chatbot u
 
 3. Install dependencies:
    ```
-   pip install slack_bolt python-dotenv
+   pip install -r requirements.txt
    ```
 
-4. Create a `.env` file in the project root with your Slack tokens:
-   ```
-   SLACK_BOT_TOKEN=xoxb-your-bot-token
-   SLACK_APP_TOKEN=xapp-your-app-token
-   ```
-
-5. Update the `qa_data.json` file with your own Q&A pairs.
+4. Prepare your data:
+   - Create a `data` directory in the project root if it doesn't exist
+   - Place your document files (pdf, txt, json, csv, html, md) in the `data` directory
 
 ## Usage
 
-1. Start the bot:
+1. Run the chatbot:
    ```
-   python slack_bot.py
+   python rag_chatbot.py
    ```
 
-2. In Slack, invite the bot to a channel or start a direct message conversation.
+2. Once initialized, you can start asking questions. Type your questions and press Enter.
 
-3. Ask questions and receive answers based on the predefined Q&A data.
+3. To exit the chatbot, type 'quit' and press Enter.
 
 ## Project Structure
 
-- `slack_bot.py`: Main script for Slack integration
-- `simple_chatbot.py`: Implementation of the SimpleChatbot class
-- `qa_data.json`: JSON file containing predefined Q&A pairs
-- `.env`: Environment file for storing Slack tokens (not tracked in git)
+- `rag_chatbot.py`: Main script implementing the RAG-based chatbot
+- `data/`: Directory for storing document files (not included in the repository)
+- `requirements.txt`: List of Python dependencies
+- `README.md`: This file, containing project documentation
 
 ## Customization
 
-To add or modify Q&A pairs, edit the `qa_data.json` file. The format is:
+- To customize the knowledge base, add or remove documents from the `data` directory
+- To use a different language model, modify the `model_name` parameter in the `RAGChatbot` initialization
 
-```json
-{
-  "questions": [
-    {
-      "question": "Your question here?",
-      "answer": "Your answer here."
-    },
-    ...
-  ]
-}
-```
+## How It Works
+
+1. The chatbot loads and processes documents from the `data` directory
+2. It uses a text splitter to break documents into smaller chunks
+3. These chunks are embedded and stored in a vector database (Chroma)
+4. When a question is asked, the most relevant chunks are retrieved
+5. The language model generates a response based on the retrieved information
+
+## Troubleshooting
+
+- If you see a message about "Number of requested results is greater than number of elements in index", ensure that your `data` directory contains multiple documents with sufficient content.
+- You may need to adjust the `chunk_size` in the `RecursiveCharacterTextSplitter` if you're working with very small documents.
+
+## Limitations
+
+- The quality of responses depends on the documents provided in the `data` directory
+- The chatbot may occasionally generate incorrect or inconsistent responses
+- It doesn't maintain conversation context between questions
 
 ## Future Improvements
 
-- Implement more advanced natural language processing
-- Integrate with external data sources
-- Add a knowledge graph for more context-aware responses
-- Implement RAG (Retrieval-Augmented Generation) for dynamic response generation
-- Add user feedback mechanisms
-- Implement analytics and performance tracking
+- Implement caching to improve response time
+- Add support for multi-turn conversations
+- Implement user feedback mechanisms for continuous improvement
+- Add support for online resources as part of the knowledge base
+- **Integrate Jira wiki support:** Future versions will include the ability to connect to and retrieve information from Jira wikis, expanding the knowledge base to include up-to-date company documentation.
+- **Enhance RAG capabilities:** We plan to improve the Retrieval-Augmented Generation system to provide more accurate and context-aware responses, possibly by incorporating more advanced language models and retrieval techniques.
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please feel free to submit a Pull Request to the [GitHub repository](https://github.com/brandongraves08/ai_project).
 
 ## License
 

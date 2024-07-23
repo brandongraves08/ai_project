@@ -2,7 +2,7 @@ import os
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from dotenv import load_dotenv
-from simple_chatbot import SimpleChatbot
+from rag_chatbot import RAGChatbot
 
 # Load environment variables
 load_dotenv()
@@ -10,8 +10,16 @@ load_dotenv()
 # Initialize the Slack app
 app = App(token=os.environ["SLACK_BOT_TOKEN"])
 
-# Initialize your simple chatbot
-chatbot = SimpleChatbot('qa_data.json')
+# Jira wiki configuration
+jira_config = {
+    'base_url': os.environ["JIRA_BASE_URL"],
+    'username': os.environ["JIRA_USERNAME"],
+    'api_token': os.environ["JIRA_API_TOKEN"],
+    'space_key': os.environ["JIRA_SPACE_KEY"]
+}
+
+# Initialize your RAG chatbot with the data directory and Jira config
+chatbot = RAGChatbot('./data', jira_config=jira_config)
 
 @app.event("app_mention")
 def handle_mention(event, say):
@@ -21,7 +29,7 @@ def handle_mention(event, say):
     # Remove the bot mention from the text
     text = text.split('>')[-1].strip()
     
-    # Get response from the simple chatbot
+    # Get response from the RAG chatbot
     response = chatbot.get_response(text)
     
     say(f"<@{user}> {response}")
@@ -32,7 +40,7 @@ def handle_message(event, say):
         user = event['user']
         text = event['text']
         
-        # Get response from the simple chatbot
+        # Get response from the RAG chatbot
         response = chatbot.get_response(text)
         
         say(f"<@{user}> {response}")
