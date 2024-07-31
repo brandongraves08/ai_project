@@ -10,16 +10,8 @@ load_dotenv()
 # Initialize the Slack app
 app = App(token=os.environ["SLACK_BOT_TOKEN"])
 
-# Jira wiki configuration
-jira_config = {
-    'base_url': os.environ["JIRA_BASE_URL"],
-    'username': os.environ["JIRA_USERNAME"],
-    'api_token': os.environ["JIRA_API_TOKEN"],
-    'space_key': os.environ["JIRA_SPACE_KEY"]
-}
-
-# Initialize your RAG chatbot with the data directory and Jira config
-chatbot = RAGChatbot('./data', jira_config=jira_config)
+# Initialize your RAG chatbot with the data directory
+chatbot = RAGChatbot('./data')
 
 @app.event("app_mention")
 def handle_mention(event, say):
@@ -44,6 +36,10 @@ def handle_message(event, say):
         response = chatbot.get_response(text)
         
         say(f"<@{user}> {response}")
+
+if __name__ == "__main__":
+    handler = SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"])
+    handler.start()
 
 if __name__ == "__main__":
     handler = SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"])

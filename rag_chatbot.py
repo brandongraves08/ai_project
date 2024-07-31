@@ -24,12 +24,10 @@ class RAGChatbot:
         self.model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
         self.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         self.vectorstore = None
-        self.qa_chain = None
-
-        self.documents = self.load_documents(data_directory)
+        self.documents = self._load_documents(data_directory)
         self._setup()
 
-    def load_documents(self, directory: str) -> List[Document]:
+    def _load_documents(self, directory: str) -> List[Document]:
         documents = []
         for filename in os.listdir(directory):
             filepath = os.path.join(directory, filename)
@@ -52,9 +50,8 @@ class RAGChatbot:
                 documents.extend(loader.load())
             else:
                 print(f"Unsupported file type: {filename}")
-        
         return documents
-
+        return documents
     def load_json(self, filepath: str) -> List[Document]:
         with open(filepath, 'r') as file:
             data = json.load(file)
